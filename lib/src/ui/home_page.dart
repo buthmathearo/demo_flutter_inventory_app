@@ -1,4 +1,4 @@
-import 'package:demo_flutter_inventory_app/src/ui/item_detail.dart';
+import 'package:demo_flutter_inventory_app/src/ui/item_detail_page.dart';
 import 'package:demo_flutter_inventory_app/src/util/util.dart';
 import 'package:flutter/material.dart';
 
@@ -17,12 +17,12 @@ class _HomePageState extends State<HomePage> {
           IconButton(icon: Icon(Icons.cloud_download), onPressed: () {})
         ],
       ),
-      body: _buildEmptyItemView(),
-      floatingActionButton: _buildFloatingActionButton(context),
+      body: _emptyItemView(),
+      floatingActionButton: _floatingActionButton(context),
     );
   }
 
-  Widget _buildEmptyItemView() {
+  Widget _emptyItemView() {
     return Center(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -38,18 +38,18 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildFloatingActionButton(BuildContext context) {
+  Widget _floatingActionButton(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(8.0),
       child: FloatingActionButton(
           child: Icon(Icons.add, color: Colors.white),
           onPressed: () {
-            _openItemDetailPage(context);
+            _openDetailPage(context);
           }),
     );
   }
 
-  void _openItemDetailPage(BuildContext context) {
+  void _openDetailPage(BuildContext context) {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return ItemDetailPage();
     }));
