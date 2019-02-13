@@ -1,5 +1,5 @@
 import 'package:demo_flutter_inventory_app/src/ui/dialog/unsaved_changes_dialog.dart';
-import 'package:demo_flutter_inventory_app/src/ui/item_detail_form.dart';
+import 'package:demo_flutter_inventory_app/src/ui/view/form_detail.dart';
 import 'package:flutter/material.dart';
 
 class ItemDetailPage extends StatefulWidget {
