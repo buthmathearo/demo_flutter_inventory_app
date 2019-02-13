@@ -1,7 +1,7 @@
 class Item {
   var productName;
   var price;
-  var qty;
+  var quantity;
   var supplierName;
   var supplierPhone;
   var supplierEmail;
@@ -10,7 +10,7 @@ class Item {
   Item(
       {this.productName,
       this.price,
-      this.qty,
+      this.quantity,
       this.supplierName,
       this.supplierPhone,
       this.supplierEmail});
