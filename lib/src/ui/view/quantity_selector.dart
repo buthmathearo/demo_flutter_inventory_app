@@ -3,18 +3,21 @@ import 'package:flutter/material.dart';
 class QuantitySelector extends StatefulWidget {
   final double padding;
 
-  QuantitySelector({this.padding = 16.0});
+  QuantitySelector({Key key, this.padding = 16.0}) : super(key: key);
 
   @override
-  _QuantitySelectorState createState() {
-    return new _QuantitySelectorState();
+  QuantitySelectorState createState() {
+    return new QuantitySelectorState();
   }
 }
 
-class _QuantitySelectorState extends State<QuantitySelector> {
+class QuantitySelectorState extends State<QuantitySelector> {
   Color _buttonColor;
   int _counter = 0;
   TextEditingController _textController;
+
+  // Getter.
+  String get text => _textController.text;
 
   @override
   void initState() {
@@ -39,6 +42,10 @@ class _QuantitySelectorState extends State<QuantitySelector> {
     );
 
     final minus = _smallButton(Icons.remove, () {
+      if (_textController.text.isNotEmpty) {
+        _counter = int.parse(_textController.text);
+      }
+
       if (_counter > 0) {
         if (--_counter == 0) {
           _textController.text = '';
@@ -61,7 +68,10 @@ class _QuantitySelectorState extends State<QuantitySelector> {
     );
 
     final plus = _smallButton(Icons.add, () {
-      _textController.text= '${++_counter}';
+      if (_textController.text.isNotEmpty) {
+        _counter = int.parse(_textController.text);
+      }
+      _textController.text = '${++_counter}';
     });
 
     return Container(
@@ -88,4 +98,5 @@ class _QuantitySelectorState extends State<QuantitySelector> {
       ),
     );
   }
+
 }
