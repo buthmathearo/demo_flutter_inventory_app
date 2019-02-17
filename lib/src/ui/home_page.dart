@@ -16,27 +16,37 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Inventory Manager'),
+        title: Text('គ្រប់គ្រងទំនិញ'),
         actions: [
-          IconButton(icon: Icon(Icons.cloud_download), onPressed: () {})
+          IconButton(
+              icon: Icon(Icons.cloud_download),
+              onPressed: () {
+                setState(() {
+                  _items.addAll(generateSampleListItems());
+                });
+              })
         ],
       ),
-      body: _buildBody(context),
-      floatingActionButton: _floatingActionButton(context),
+      body: _body(),
+      floatingActionButton: _floatingActionButton(),
     );
   }
 
-  Widget _buildBody(BuildContext context) {
+  Widget _body() {
     if (_items.isEmpty) {
       return _emptyItemView();
     } else {
       return ListView.builder(
         itemBuilder: (context, index) {
-          return ListItem(_items[index]);
+          return ListItem(_items[index], index, _onItemClick);
         },
         itemCount: _items.length,
       );
     }
+  }
+
+  void _onItemClick(Item item, int position) {
+    _openDetailPage(item, position);
   }
 
   Widget _emptyItemView() {
@@ -45,38 +55,63 @@ class _HomePageState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(getAsset('empty_white_box.png')),
+          Image.asset(getAsset('ic_empty_white_box.png')),
           Padding(
             padding: EdgeInsets.all(16.0),
-            child: Text('Start adding some items to your inventory'),
+            child: Text(
+                'អ្នកមិនទាន់បានបញ្ចូលទំនិញនៅឡើយទេ'), //Start adding some items to your inventory
           )
         ],
       ),
     );
   }
 
-  Widget _floatingActionButton(BuildContext context) {
+  Widget _floatingActionButton() {
     return Padding(
       padding: EdgeInsets.all(8.0),
       child: FloatingActionButton(
           child: Icon(Icons.add, color: Colors.white),
           onPressed: () {
-            _openDetailPage(context);
+            _openItemDetailPage();
           }),
     );
   }
 
-  void _openDetailPage(BuildContext context) {
-    Navigator.push<Item>(context, MaterialPageRoute(builder: (context) {
+  void _openItemDetailPage() async {
+    final item =
+        await Navigator.push(context, MaterialPageRoute(builder: (context) {
       return ItemDetailPage();
-    })).then((item) {
-      // Must check null here, even though we don't pass [Item]
-      // from [ItemDetailPage].
-      if (item != null) {
+    }));
+
+    if (item != null) {
+      setState(() {
+        _items.add(item);
+      });
+    }
+  }
+
+  void _openDetailPage(Item item, int index) async {
+    final object =
+        await Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return ItemDetailPage(item: item);
+    }));
+
+    if (object == null) return;
+
+    if (object is Item) {
+      setState(() {
+        _items[index] = object;
+      });
+    } else if (object is ItemDetailTransaction) {
+      if (object == ItemDetailTransaction.DELETE) {
         setState(() {
-          _items.add(item);
+          _items.removeAt(index);
+        });
+      } else {
+        setState(() {
+          _items.clear();
         });
       }
-    });
+    }
   }
 }

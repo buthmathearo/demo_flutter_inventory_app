@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 class QuantitySelector extends StatefulWidget {
-  final double padding;
+  const QuantitySelector({Key key, this.quantity = 0, this.padding = 16.0})
+      : super(key: key);
 
-  QuantitySelector({Key key, this.padding = 16.0}) : super(key: key);
+  final double padding;
+  final int quantity;
 
   @override
   QuantitySelectorState createState() {
@@ -14,7 +16,7 @@ class QuantitySelector extends StatefulWidget {
 class QuantitySelectorState extends State<QuantitySelector> {
   Color _buttonColor;
   int _counter = 0;
-  TextEditingController _textController;
+  TextEditingController _textController = TextEditingController();
 
   // Getter.
   String get text => _textController.text;
@@ -22,7 +24,10 @@ class QuantitySelectorState extends State<QuantitySelector> {
   @override
   void initState() {
     super.initState();
-    _textController = TextEditingController();
+    if (widget.quantity != 0) {
+      _counter = widget.quantity;
+      _textController.text = _counter.toString();
+    }
   }
 
   @override
@@ -38,7 +43,7 @@ class QuantitySelectorState extends State<QuantitySelector> {
 
     final label = Padding(
       padding: EdgeInsets.only(top: widget.padding),
-      child: Text('Quantity'),
+      child: Text('ចំនួន'),
     );
 
     final minus = _smallButton(Icons.remove, () {
@@ -56,13 +61,20 @@ class QuantitySelectorState extends State<QuantitySelector> {
     });
 
     final input = Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      padding: EdgeInsets.symmetric(horizontal: 2.0),
       child: SizedBox(
         width: 120.0,
         child: TextFormField(
           maxLines: 1,
           maxLength: 4,
+          textAlign: TextAlign.center,
+          decoration: InputDecoration(counterText: ''),
           controller: _textController,
+          validator: (value) {
+            if (value.isEmpty) {
+              return 'បំពេញអោយបានត្រឹមត្រូវ';
+            }
+          },
         ),
       ),
     );
@@ -98,5 +110,4 @@ class QuantitySelectorState extends State<QuantitySelector> {
       ),
     );
   }
-
 }
